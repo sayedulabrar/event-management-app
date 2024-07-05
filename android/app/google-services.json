@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "775883019029",
+    "project_id": "rive-9f8c6",
+    "storage_bucket": "rive-9f8c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775883019029:android:cc425c72ce24f78ea3cf1c",
+        "android_client_info": {
+          "package_name": "com.rive.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdnZckD7AtpSk07KoSIj8pdBz6ti4rGn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
