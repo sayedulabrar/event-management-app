@@ -37,48 +37,6 @@ This is a calendar event management application featuring a dynamic and interact
 
 Check out the working demo on YouTube: [Calendar Event Management App Demo](https://youtu.be/u_dMjbhMjoQ)
 
-## Installation
-
-1. **Clone the Repository**:
-   ```sh
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
-   ```
-
-2. **Install Dependencies**:
-   ```sh
-   flutter pub get
-   ```
-
-3. **Configure Firebase**:
-   - Follow the instructions to set up Firebase for your Flutter app.
-   - Download the `google-services.json` file and place it in `android/app`.
-
-4. **Run the App**:
-   ```sh
-   flutter run
-   ```
-
-## Building the Release APK
-
-1. **Generate a Keystore**:
-   ```sh
-   keytool -genkey -v -keystore key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias myKeyAlias
-   ```
-
-2. **Configure the Keystore**:
-   - Create a `key.properties` file in the `android` directory with the following content:
-     ```properties
-     storePassword=<your-store-password>
-     keyPassword=<your-key-password>
-     keyAlias=myKeyAlias
-     storeFile=key.jks
-     ```
-
-3. **Build the APK**:
-   ```sh
-   flutter build apk --release
-   ```
 
 ## Usage
 
