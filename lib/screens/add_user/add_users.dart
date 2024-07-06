@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rive_flutter/constants.dart';
+import 'package:rive_flutter/service/alert_service.dart';
 import 'package:rive_flutter/service/auth_service.dart';
 import 'package:rive_flutter/model/user.dart';
 
@@ -25,13 +27,14 @@ class _AddUsersState extends State<AddUsers> {
   final _roleController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  late AlertService _alertService;
   UserRole _selectedRole = UserRole.User;
 
   @override
   void initState() {
     super.initState();
     _authService = _getIt.get<AuthService>();
+    _alertService = _getIt.get<AlertService>();
   }
 
   Future<void> _signup(String email, String password, UserRole role) async {
@@ -109,8 +112,7 @@ class _AddUsersState extends State<AddUsers> {
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                hintText:
-                    "Password must have Capital,small letters and at least 3 numbers ",
+                hintText: "required Capital,small letters at least 3 numbers ",
                 labelText: 'Password',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
@@ -174,7 +176,14 @@ class _AddUsersState extends State<AddUsers> {
               onPressed: () {
                 String email = _emailController.text;
                 String password = _passwordController.text;
-                _signup(email, password, _selectedRole);
+                if (EMAIL_VALIDATION_REGEX.hasMatch(password) &&
+                    PASSWORD_VALIDATION_REGEX.hasMatch(password)) {
+                  _signup(email, password, _selectedRole);
+                } else {
+                  _alertService.showToast(
+                      text:
+                          "Please follow correct email and password format.There should be at least 3 number,1 Alphabet and one small letter in password");
+                }
               },
               child: Text('Create User'),
             ),

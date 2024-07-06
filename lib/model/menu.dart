@@ -28,7 +28,7 @@ List<Menu> sidebarMenus = [
     ),
   ),
   Menu(
-    title: "Notifications",
+    title: "Reminders",
     rive: RiveModel(
       src: "assets/RiveAssets/icons.riv",
       artboard: "BELL",
