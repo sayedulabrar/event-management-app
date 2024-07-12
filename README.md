@@ -1,7 +1,11 @@
 # Calendar Event Management App
-## Demo
 
-Check out the working demo on YouTube:(https://youtu.be/u_dMjbhMjoQ)
+## Check Out the Demo!
+
+You can see a working demo of this project on YouTube:
+
+[Check out the working demo on YouTube](https://youtu.be/u_dMjbhMjoQ)
+
 
 This is a calendar event management application featuring a dynamic and interactive UI. It uses Rive for animations and provides various functionalities for admins and users, including event management, user management, and notifications.
 
