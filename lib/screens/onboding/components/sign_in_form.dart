@@ -313,7 +313,7 @@ class _SignInButtonState extends State<SignInButton> {
               widget.onTap();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.shade300,
+              backgroundColor: Colors.black,
               minimumSize: const Size(double.infinity, 56),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(

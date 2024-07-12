@@ -139,9 +139,18 @@ class _AddEventState extends State<AddEvent> {
 
   Future<void> sendNotificationToAllUsers() async {
     List<String> tokens = await widget.ntservice.getAllTokens();
+    DateTime eventTime = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _selectedTime.hour,
+      _selectedTime.minute,
+    );
+    String eventTimeIsoString = eventTime.toIso8601String();
 
     for (String token in tokens) {
-      widget.ntservice..sendNotification(token, _titleController.text);
+      widget.ntservice
+          .sendNotification(token, _titleController.text, eventTimeIsoString);
     }
   }
 

@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rive_flutter/model/user.dart';
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   User? _user;
   String? _role;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   User? get user {
     return _user;
@@ -23,6 +25,7 @@ class AuthService {
 
   Future<bool> login(String email, String password) async {
     try {
+      await secureStorage.write(key: 'adminPassword', value: password);
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -56,27 +59,27 @@ class AuthService {
     }
   }
 
-  Future<bool> signup(String email, String password) async {
-    try {
-      // Create a new user account with email and password
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (credential.user != null) {
-        // User successfully signed up
-        return true;
-      } else {
-        // Handle error
-        return false;
-      }
-    } catch (e) {
-      // Handle exception
-      return false;
-    }
-  }
+  // Future<bool> signup(String email, String password) async {
+  //   try {
+  //     // Create a new user account with email and password
+  //     final credential =
+  //         await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //
+  //     if (credential.user != null) {
+  //       // User successfully signed up
+  //       return true;
+  //     } else {
+  //       // Handle error
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     // Handle exception
+  //     return false;
+  //   }
+  // }
 
   Future<List<UserModel>> fetchUsers() async {
     List<UserModel> users = [];

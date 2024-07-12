@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,38 +21,79 @@ class AddUsers extends StatefulWidget {
 }
 
 class _AddUsersState extends State<AddUsers> {
-  late AuthService _authService;
   final GetIt _getIt = GetIt.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _roleController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   late AlertService _alertService;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
   UserRole _selectedRole = UserRole.User;
 
   @override
   void initState() {
     super.initState();
-    _authService = _getIt.get<AuthService>();
     _alertService = _getIt.get<AlertService>();
   }
 
+  Future<bool> signup(String email, String password) async {
+    try {
+      // Create a new user account with email and password
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (credential.user != null) {
+        // User successfully signed up
+        return true;
+      } else {
+        // Handle error
+        return false;
+      }
+    } catch (e) {
+      // Handle exception
+      return false;
+    }
+  }
+
   Future<void> _signup(String email, String password, UserRole role) async {
-    bool success = await _authService.signup(email, password);
-    if (success) {
-      await _firestore.collection('users').add({
-        'email': email,
-        'password': password,
-        'role': role == UserRole.Admin ? 'admin' : 'user',
-        'disabled': false, // Initially not disabled
-      });
-      _emailController.clear();
-      _passwordController.clear();
-      _roleController.clear();
-      setState(() {
-        _selectedRole = UserRole.User;
-      });
+    // Retrieve current admin's email and store current admin user
+    User? adminUser = FirebaseAuth.instance.currentUser;
+    String? adminEmail = adminUser?.email;
+
+    if (adminEmail != null) {
+      // Retrieve the stored admin password securely
+      String? adminPassword = await secureStorage.read(key: 'adminPassword');
+
+      bool success = await signup(email, password);
+      if (success) {
+        await _firestore.collection('users').add({
+          'email': email,
+          'password': password,
+          'role': role == UserRole.Admin ? 'admin' : 'user',
+          'disabled': false, // Initially not disabled
+        });
+
+        if (adminPassword != null) {
+          // Re-authenticate the admin user
+          AuthCredential adminCredential = EmailAuthProvider.credential(
+            email: adminEmail,
+            password: adminPassword,
+          );
+          await FirebaseAuth.instance.signInWithCredential(adminCredential);
+        }
+
+        _emailController.clear();
+        _passwordController.clear();
+        _roleController.clear();
+
+        setState(() {
+          _selectedRole = UserRole.User;
+        });
+      }
     }
   }
 
@@ -112,7 +154,7 @@ class _AddUsersState extends State<AddUsers> {
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                hintText: "required Capital,small letters at least 3 numbers ",
+                hintText: "required Capital,small letters and >=3 numbers",
                 labelText: 'Password',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
@@ -176,13 +218,13 @@ class _AddUsersState extends State<AddUsers> {
               onPressed: () {
                 String email = _emailController.text;
                 String password = _passwordController.text;
-                if (EMAIL_VALIDATION_REGEX.hasMatch(password) &&
+                if (EMAIL_VALIDATION_REGEX.hasMatch(email) &&
                     PASSWORD_VALIDATION_REGEX.hasMatch(password)) {
                   _signup(email, password, _selectedRole);
+                  _alertService.showToast(text: "Account created successfully");
                 } else {
                   _alertService.showToast(
-                      text:
-                          "Please follow correct email and password format.There should be at least 3 number,1 Alphabet and one small letter in password");
+                      text: "Follow correct pattern for password and email");
                 }
               },
               child: Text('Create User'),

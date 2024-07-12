@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:get_it/get_it.dart';
+import 'package:rive_flutter/service/local_notification.dart';
 import 'auth_service.dart';
 
 class PushNotificationService {
@@ -21,6 +23,7 @@ class PushNotificationService {
   Future<void> initialize() async {
     // Request permission for iOS
     // Request permissions for iOS
+
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -35,12 +38,6 @@ class PushNotificationService {
     } else {
       print('User declined or has not accepted permission');
     }
-
-    // // For apple platforms, ensure the APNS token is available
-    // final apnsToken = await _firebaseMessaging.getAPNSToken();
-    // if (apnsToken != null) {
-    //   // APNS token is available
-    // }
 
     // Get the token
     String? token = await _firebaseMessaging.getToken();
@@ -63,16 +60,15 @@ class PushNotificationService {
   }
 
   Future<void> saveToken(String token) async {
-    // Save the token in Firestore or another database
-
-    await _firestore.collection('tokens').doc(_authService.user!.uid).set({
+    // Save the token in Firestore with a generated document ID
+    await _firestore.collection('tokens').add({
       'deviceToken': token,
     });
   }
 
   Future<List<String>> getAllTokens() async {
     QuerySnapshot snapshot = await _firestore.collection('tokens').get();
-    List<String> tokens = [];
+    Set<String> tokens = {};
 
     for (var doc in snapshot.docs) {
       if (doc['deviceToken'] != null) {
@@ -80,7 +76,7 @@ class PushNotificationService {
       }
     }
 
-    return tokens;
+    return tokens.toList();
   }
 
   Future<String> getAccessToken() async {
@@ -125,9 +121,12 @@ class PushNotificationService {
     return credentials.accessToken.data;
   }
 
-  Future<void> sendNotification(String deviceToken, String title) async {
+  Future<void> sendNotification(
+      String deviceToken, String title, String eventTime) async
+  {
+    final service = FlutterBackgroundService();
     final String serverAccessTokenkey = await getAccessToken();
-
+    DateTime foradmin = DateTime.parse(eventTime);
     String endpointFirebaseCloudMessaging =
         'https://fcm.googleapis.com/v1/projects/rive-9f8c6/messages:send';
 
@@ -135,7 +134,7 @@ class PushNotificationService {
       "message": {
         "token": deviceToken,
         'notification': {"title": title, 'body': "New event added by admin"},
-        'data': {'': ''}
+        'data': {'event_time': eventTime}
       }
     };
 
@@ -150,9 +149,29 @@ class PushNotificationService {
 
     if (response.statusCode == 200) {
       print('FCM message sent successfully');
+
+      await GetIt.I<NotificationService>().showInstantNotification(
+        title,
+        "local notification"
+      );
+      // DateTime notificationTime = foradmin.subtract(Duration(minutes: 10));
+      // if (notificationTime.isAfter(DateTime.now())) {
+      //
+      //   await GetIt.I<NotificationService>().scheduleNotification(
+      //     0,
+      //     title,
+      //     "10 minutes remaining",
+      //     notificationTime,
+      //   );
+      //
+      // }
     } else {
       print('Failed to send FCM message: ${response.statusCode}');
       print(response.body);
     }
   }
+
+
+
+
 }

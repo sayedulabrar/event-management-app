@@ -13,7 +13,7 @@ void showCustomDialog(BuildContext context, {required ValueChanged onValue}) {
     pageBuilder: (_, __, ___) {
       return Center(
         child: Container(
-          height: 650,
+          height: 670,
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
@@ -33,101 +33,102 @@ void showCustomDialog(BuildContext context, {required ValueChanged onValue}) {
             ],
           ),
           child: Scaffold(
-            body: Column(
+            body: Stack(
+              clipBehavior: Clip.none,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Sign in",
+                        style: TextStyle(
+                          fontSize: 34,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          "Access to 240+ hours of content. Learn design and code, by building real apps with Flutter and Swift.",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SignInForm(),
+                      const Row(
                         children: [
-                          const Text(
-                            "Sign in",
-                            style: TextStyle(
-                              fontSize: 34,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600,
-                            ),
+                          Expanded(
+                            child: Divider(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              "Access and get notified of daily events",
-                              textAlign: TextAlign.center,
+                              "OR",
+                              style: TextStyle(
+                                color: Colors.black26,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                          const SignInForm(),
-                          const Row(
-                            children: [
-                              Expanded(
-                                child: Divider(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  "OR",
-                                  style: TextStyle(
-                                    color: Colors.black26,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Expanded(child: Divider()),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 24),
-                            child: Text(
-                              "Sign up with Email, Apple or Google",
-                              style: TextStyle(color: Colors.black54),
+                          Expanded(child: Divider()),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Text(
+                          "Sign up with Email, Apple or Google",
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            padding: EdgeInsets.zero,
+                            icon: SvgPicture.asset(
+                              "assets/icons/email_box.svg",
+                              height: 64,
+                              width: 64,
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                padding: EdgeInsets.zero,
-                                icon: SvgPicture.asset(
-                                  "assets/icons/email_box.svg",
-                                  height: 64,
-                                  width: 64,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                padding: EdgeInsets.zero,
-                                icon: SvgPicture.asset(
-                                  "assets/icons/apple_box.svg",
-                                  height: 64,
-                                  width: 64,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                padding: EdgeInsets.zero,
-                                icon: SvgPicture.asset(
-                                  "assets/icons/google_box.svg",
-                                  height: 64,
-                                  width: 64,
-                                ),
-                              ),
-                            ],
+                          IconButton(
+                            onPressed: () {},
+                            padding: EdgeInsets.zero,
+                            icon: SvgPicture.asset(
+                              "assets/icons/apple_box.svg",
+                              height: 64,
+                              width: 64,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            padding: EdgeInsets.zero,
+                            icon: SvgPicture.asset(
+                              "assets/icons/google_box.svg",
+                              height: 64,
+                              width: 64,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pop(context),
-                  child: const CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.close,
-                      size: 20,
-                      color: Colors.black,
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: -48,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.close,
+                        size: 20,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),

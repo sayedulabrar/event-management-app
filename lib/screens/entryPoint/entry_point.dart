@@ -32,7 +32,6 @@ class _EntryPointState extends State<EntryPoint>
   Menu selectedSideMenu = sidebarMenus.first;
   final GetIt _getIt = GetIt.instance;
   late PushNotificationService _pushNotificationService;
-  late NotificationService _notificationService;
   late AuthService _authService;
 
   late SMIBool isMenuOpenInput;
@@ -44,13 +43,10 @@ class _EntryPointState extends State<EntryPoint>
   @override
   void initState() {
     super.initState();
-    _pushNotificationService = _getIt.get<PushNotificationService>();
-    _notificationService = _getIt.get<NotificationService>();
     _authService = _getIt.get<AuthService>();
-    setupFCM();
+    _pushNotificationService = _getIt.get<PushNotificationService>();
     _authService.fetchUserRole();
     tz.initializeTimeZones();
-    _startGlobalEventCheckTimer();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -70,38 +66,6 @@ class _EntryPointState extends State<EntryPoint>
       ),
     );
     _pageController = PageController();
-  }
-
-  void setupFCM() async {
-    await _pushNotificationService.initialize();
-    await _notificationService.init();
-  }
-
-  void _startGlobalEventCheckTimer() {
-    Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
-      await _checkForUpcomingEvents();
-    });
-  }
-
-  Future<void> _checkForUpcomingEvents() async {
-    DateTime now = DateTime.now();
-    DateTime tenMinutesFromNow = now.add(const Duration(minutes: 10));
-
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('events')
-        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(now))
-        .where('date',
-            isLessThanOrEqualTo: Timestamp.fromDate(tenMinutesFromNow))
-        .get();
-
-    for (var event in snapshot.docs) {
-      if (!notifiedEvents.contains(event.id)) {
-        await GetIt.I<NotificationService>()
-            .showInstantNotification(event['title'], event['description']);
-        print("local noti called");
-        notifiedEvents.add(event.id); // Mark event as notified
-      }
-    }
   }
 
   @override
