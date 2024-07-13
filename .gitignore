@@ -41,3 +41,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+# Explicitly allow the release APK file in Released-Apk directory
+!Released-Apk/app-release.apk
