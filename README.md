@@ -7,60 +7,6 @@ You can see a working demo of this project on YouTube:(the video is of an early 
 ## [Check out the working demo on YouTube](https://youtu.be/u_dMjbhMjoQ)
 
 
-This is a calendar event management application featuring a dynamic and interactive UI. It uses Rive for animations and provides various functionalities for admins and users, including event management, user management, and notifications.
-
- # App Images
-
-## Image: signin_failed
-![signin_failed](assets/Backgrounds/signin_failed.png)
-
-## Image: Remaining_time_of_today
-![Remaining_time_of_today](assets/Backgrounds/Remaining_time_of_today.png)
-
-## Image: add_edit
-![add_edit](assets/Backgrounds/add_edit.png)
-
-## Image: admin_user_list
-![admin_user_list](assets/Backgrounds/admin_user_list.png)
-
-## Image: signin
-![signin](assets/Backgrounds/signin.png)
-
-## Image: signin_success
-![signin_success](assets/Backgrounds/signin_success.png)
-
-## Image: navbar
-![navbar](assets/Backgrounds/navbar.png)
-
-## Image: datewise_events
-![datewise_events](assets/Backgrounds/datewise_events.png)
-
-## Image: all_events
-![all_events](assets/Backgrounds/all_events.png)
-
-## Image: search_events
-![search_events](assets/Backgrounds/search_events.png)
-
-## Image: admin_edit_delete_option
-![admin_edit_delete_option](assets/Backgrounds/admin_edit_delete_option.png)
-
-## Image: Delete_event
-![Delete_event](assets/Backgrounds/Delete_event.png)
-
-## Image: disable_user
-![disable_user](assets/Backgrounds/disable_user.png)
-
-## Image: notification
-![notification](assets/Backgrounds/notification.png)
-
-## Image: disabled_user_try_signin
-![disabled_user_try_signin](assets/Backgrounds/disabled_user_try_signin.png)
-
-## Image: app_running_background_proof
-![app_running_background_proof](assets/Backgrounds/app_running_background_proof.jpg)
-
-## Image: Readme2
-![Readme2](assets/Backgrounds/Readme2.md)
 
 ## Features
 
