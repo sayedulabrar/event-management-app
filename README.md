@@ -26,9 +26,9 @@ You can see a working demo of this project on YouTube:(the video is of an early 
 - **Enable/Disable Users**: Admins can enable or disable users to control their login access.
 
 ### Notifications
-
-- **Local Notifications**: Users receive a reminder notification 10 minutes before an event starts.
-- **Push Notifications**: Sends notifications to all users when a new event is added by an admin.
+## **UNIQUE FEATURE**
+- **Local Notifications**: Users receive a reminder notification 10 minutes before an event starts. It uses background task management to set reminder notifications when the admin adds a new event. It's a better alternative to cloud functions requiring users to pay every month.
+- **Push Notifications**: Sends notifications to all users when an admin adds a new event.
 
 ### Authentication
 
